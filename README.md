@@ -1,5 +1,4 @@
-# Argoproj -
-
+# Argoproj
 ![Argo Image](argo.jpg)
 
 ## Tools we are going to learn together
