@@ -1,0 +1,38 @@
+### We have changed the type of the argocd-server service from the ClusterIP to NodePort as following:
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: server
+    app.kubernetes.io/name: argocd-server
+    app.kubernetes.io/part-of: argocd
+  name: argocd-server
+spec:
+  ports:
+  - name: http
+    nodePort: 32073
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  - name: https
+    nodePort: 32074
+    port: 443
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app.kubernetes.io/name: argocd-server
+  type: NodePort
+
+
+### If you want to connect to argocd-server in an insecure manner , add the following DATA block to argocd-cmd-params-cm ConfigMap:
+
+apiVersion: v1
+kind: ConfigMap
+data:
+  server.insecure: "true"
+metadata:
+  labels:
+    app.kubernetes.io/name: argocd-cmd-params-cm
+    app.kubernetes.io/part-of: argocd
+  name: argocd-cmd-params-cm

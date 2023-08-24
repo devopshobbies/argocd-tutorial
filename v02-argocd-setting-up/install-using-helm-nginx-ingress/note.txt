@@ -1,0 +1,10 @@
+### Installing Argocd Helm Chart by overriding the parameters related to Ingress
+### Please Note that before installing Argo, you must have nginx-ingress-controller installed on the cluster
+### Also make sure to add the host used in the ingress to the /etc/hosts file
+
+### Install Argocd Helm Chart as following:
+kubectl create ns argocd
+helm repo add argo https://argoproj.github.io/argo-helm
+helm install argocd argo/argo-cd -n argocd -f values-nginx-ingress.yml
+
+### You can also use ingress with cert manager if you want
