@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: project-resource-whitelist
+  namespace: argocd
+spec:
+  clusterResourceWhitelist:
+  - group: '*' ## it means we are allowed to use any kinds of clusterscoped resources
+    kind: '*'
+  namespaceResourceWhitelist:
+  - group: ''
+    kind: 'ServiceAccount' ## it means we are allowd to use 'serviceaccount' namespacescoped resource Only
+  destinations:
+  - namespace: '*'
+    server: '*'
+  sourceRepos:
+  - '*'

@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: project-source-restriction
+  namespace: argocd
+spec:
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  destinations:
+  - namespace: '*'
+    server: '*'
+  sourceRepos:
+  - '!https://github.com/devopshobbies/argocd-tutorial.git' ## Use '!' to place repo in BlackList, if we remove '!' the repo will be placed in WhiteList
+  - '*' ## '*' means we are allowed to use any repos
