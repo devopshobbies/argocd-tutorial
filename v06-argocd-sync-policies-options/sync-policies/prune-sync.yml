@@ -1,10 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: prune-app
+  name: prune-application
 spec:
   destination:
-    namespace: prune-app
+    namespace: prune-sync
     server: https://kubernetes.default.svc
   project: default
   source:
