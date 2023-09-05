@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prune-app
+spec:
+  destination:
+    namespace: prune-app
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: v03-argocd-applications/directoryOfmanifests
+    repoURL: https://github.com/devopshobbies/argocd-tutorial.git
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
