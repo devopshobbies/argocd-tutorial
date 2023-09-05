@@ -4,7 +4,7 @@ metadata:
   name: automated-application
 spec:
   destination:
-    namespace: automated-app
+    namespace: automated-sync
     server: https://kubernetes.default.svc
   project: default
   source:
