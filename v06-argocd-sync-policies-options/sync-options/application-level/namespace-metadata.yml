@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: test
+spec:
+  syncPolicy:
+    managedNamespaceMetadata:
+      labels: # The labels to set on the application namespace
+        any: label
+        you: like
+      annotations: # The annotations to set on the application namespace
+        the: same
+        applies: for
+        annotations: on-the-namespace
+    syncOptions:
+    - CreateNamespace=true

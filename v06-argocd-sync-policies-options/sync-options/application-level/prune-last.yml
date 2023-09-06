@@ -3,4 +3,4 @@ kind: Application
 spec:
   syncPolicy:
     syncOptions:
-    - Replace=true
+    - PruneLast=true
