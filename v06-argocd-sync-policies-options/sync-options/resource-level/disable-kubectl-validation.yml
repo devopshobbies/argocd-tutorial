@@ -1,0 +1,3 @@
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: Validate=false

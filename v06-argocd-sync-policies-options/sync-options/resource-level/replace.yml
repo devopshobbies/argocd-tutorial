@@ -1,1 +1,3 @@
-#In_progress
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: Replace=true
