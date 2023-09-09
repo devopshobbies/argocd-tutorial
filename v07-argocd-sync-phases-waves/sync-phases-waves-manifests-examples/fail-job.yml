@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mattermost-post-job-failure
+  annotations:
+    argocd.argoproj.io/hook: SyncFail
+spec:
+  template:
+    spec:
+      containers:
+        - name: mattermost-failure
+          image: mattermost:final
+          command: [ "python3", "mattermost.py"]
+          env:
+          - name: message
+            value: "MESSAGE FROM ARGOCD: The last sync is:  *** Sync Failed ***"
+          - name: url
+            value: "192.168.208.253"
+          - name: token
+            value: "1mh8r35js7dhpcswb4mpnkwpcw"
+          - name: scheme
+            value: "http"
+          - name: port
+            value: "8065"
+          - name: channel_name
+            value: "argocd-course"
+          - name: team_name
+            value: "DevOps-Hobbies"
+      restartPolicy: Never
+  backoffLimit: 0

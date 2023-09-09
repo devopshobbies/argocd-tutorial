@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: health-check-pre-job
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  template:
+    spec:
+      containers:
+        - name: health-check
+          image: curlimages/curl
+          command: ["/bin/sh", "-c"]
+          args: ["if curl -s http://192.168.208.253:8065 | grep -qi 'mattermost'; then echo 'Mattermost is up and Running'; exit 0; else echo 'Mattermost is NOT accessible'; exit 1; fi"]
+      restartPolicy: Never
+  backoffLimit: 0
