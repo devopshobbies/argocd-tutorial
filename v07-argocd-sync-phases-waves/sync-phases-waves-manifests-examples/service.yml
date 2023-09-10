@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: nginx
   annotations:
-    argocd.argoproj.io/sync-waves: "-2"
+    argocd.argoproj.io/sync-wave: "-2"
   labels:
     helm.sh/chart: nginx-0.1.0
     app.kubernetes.io/name: nginx
