@@ -2,6 +2,8 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: mattermost-post-job-failure
+  annotations:
+    argocd.argoproj.io/hook: SyncFail
 spec:
   template:
     spec:
