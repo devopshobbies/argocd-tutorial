@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: sealed-secrets
+  name: helm-tracking-strategies
   namespace: argocd
 spec:
   project: default
@@ -13,4 +13,6 @@ spec:
       releaseName: sealed-secrets
   destination:
     server: "https://kubernetes.default.svc"
-    namespace: default
+    namespace: helm-tracking-strategies
+  syncPolicy:
+    automated: {}
