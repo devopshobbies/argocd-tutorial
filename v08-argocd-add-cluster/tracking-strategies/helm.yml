@@ -15,4 +15,6 @@ spec:
     server: "https://kubernetes.default.svc"
     namespace: helm-tracking-strategies
   syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
     automated: {}
