@@ -13,4 +13,6 @@ spec:
     repoURL: "https://github.com/devopshobbies/argocd-tutorial.git"
     targetRevision: # HEAD/Branch tracking ex: HEAD/main || tag tracking ex: v1 || commit pinning ex: 9814933
   syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
     automated: {}
