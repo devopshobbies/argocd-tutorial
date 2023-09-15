@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: local
+  namespace: argocd
+spec:
+  destination:
+    namespace: local
+    name: in-cluster
+  project: default
+  source:
+    path: v03-argocd-applications/directoryOfmanifests
+    repoURL: "https://github.com/devopshobbies/argocd-tutorial.git"
+    targetRevision: # HEAD/Branch tracking ex: HEAD/main || tag tracking ex: v1 || commit pinning ex: 9814933  
