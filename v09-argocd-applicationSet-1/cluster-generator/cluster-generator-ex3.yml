@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cluster-generator-ex3
+spec:
+  generators:
+  - clusters:
+      selector:
+        matchLabels:
+          environment: staging
+      values:
+        path: helm/nginx
+        namespace: staging-ns
+  - clusters:
+      selector:
+        matchLabels:
+          environment: pre-staging
+      values:
+        path: directoryOfmanifests
+        namespace: pre-staging-ns
+  template:
+    metadata:
+      name: '{{name}}-application'
+    spec:
+      project: "default"
+      source:
+        repoURL: https://github.com/devopshobbies/argocd-tutorial.git
+        targetRevision: main
+        path: v03-argocd-applications/{{values.path}}
+      destination:
+        server: '{{server}}'
+        namespace: '{{values.namespace}}'
+      syncPolicy:
+        automated: {}
+        syncOptions:
+          - CreateNamespace=true

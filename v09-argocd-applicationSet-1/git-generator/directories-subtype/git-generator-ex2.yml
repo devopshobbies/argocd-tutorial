@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: git-directories-generator-ex2
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/devopshobbies/argocd-tutorial.git
+      revision: main
+      directories:
+      - path: v09-argocd-applicationSet-1/git-generator/resources/*
+      - path: v09-argocd-applicationSet-1/git-generator/resources/nginx-manifests
+        exclude: true
+  template:
+    metadata:
+      name: '{{path.basename}}-application'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/devopshobbies/argocd-tutorial.git
+        targetRevision: main
+        path: '{{path}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{path.basename}}-ns'

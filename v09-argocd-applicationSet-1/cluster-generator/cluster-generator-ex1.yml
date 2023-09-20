@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cluster-generator-ex1
+spec:
+  generators:
+  - clusters: {}
+  template:
+    metadata:
+      name: '{{name}}-application'
+    spec:
+      project: "default"
+      source:
+        repoURL: https://github.com/devopshobbies/argocd-tutorial.git
+        targetRevision: main
+        path: v03-argocd-applications/helm/nginx
+      destination:
+        server: '{{server}}'
+        namespace: cluster-generator
+      syncPolicy:
+        automated: {}
+        syncOptions:
+          - CreateNamespace=true
