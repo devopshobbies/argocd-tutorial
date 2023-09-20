@@ -2,6 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: git-files-generator-ex1
+  namespace: argocd
 spec:
   generators:
   - git:
