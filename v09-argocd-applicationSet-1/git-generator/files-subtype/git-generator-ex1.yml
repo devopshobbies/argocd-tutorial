@@ -8,7 +8,7 @@ spec:
   - git:
       repoURL: https://github.com/devopshobbies/argocd-tutorial.git
       revision: main
-      directories:
+      files:
       - path: v09-argocd-applicationSet-1/git-generator/cluster-config/**/config.json
   template:
     metadata:
