@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: git-files-generator-ex1
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/devopshobbies/argocd-tutorial.git
+      revision: main
+      directories:
+      - path: v09-argocd-applicationSet-1/git-generator/cluster-config/**/config.json
+  template:
+    metadata:
+      name: '{{cluster.name}}-application'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/devopshobbies/argocd-tutorial.git
+        targetRevision: main
+        path: '{{cluster.path}}'
+      destination:
+        server: '{{cluster.address}}'
+        namespace: '{{cluster.namespace}}'
+      syncPolicy:
+        automated: {}
+        syncOptions:
+          - CreateNamespace=true
