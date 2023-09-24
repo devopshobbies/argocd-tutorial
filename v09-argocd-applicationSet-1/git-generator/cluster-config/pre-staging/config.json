@@ -3,6 +3,7 @@
       "owner": "mohammad",
       "name": "pre-staging",
       "path": "v03-argocd-applications/directoryOfmanifests",
+      "source_type": "directoryOfManifests",
       "address": "https://kubernetes.default.svc",
       "namespace": "pre-staging-ns"
     }
