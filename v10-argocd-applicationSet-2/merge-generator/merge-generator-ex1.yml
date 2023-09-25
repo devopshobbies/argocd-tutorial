@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: merge-generator-ex1
+spec:
+  generators:
+    - merge:
+        mergeKeys:
+          - server
+        generators:
+          - clusters:
+              values:
+                tag: '1.23'
+                replicas: '1'
+          - clusters:
+              selector:
+                matchLabels:
+                  environment: 'staging'
+              values:
+                tag: '1.24'
+          - list:
+              elements: 
+                - server: https://kubernetes.default.svc
+                  values.replicas: '3'
+  template:
+    metadata:
+      name: '{{name}}-application'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/devopshobbies/argocd-tutorial.git
+        targetRevision: main
+        path: v03-argocd-applications/helm/nginx
+        helm:
+          parameters:
+            - name: "image.tag"
+              value: '{{values.tag}}'
+            - name: "replicaCount"
+              value: '{{values.replicas}}'
+      destination:
+        server: '{{server}}'
+        namespace: '{{metadata.labels.environment}}'
+      syncPolicy:
+        automated: {}
+        syncOptions:
+          - CreateNamespace=true

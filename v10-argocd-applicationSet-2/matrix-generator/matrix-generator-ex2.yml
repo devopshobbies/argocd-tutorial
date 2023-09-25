@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: matrix-generator-ex2
+spec:
+  generators:
+    - matrix:
+        generators:
+          - git:
+              repoURL: https://github.com/devopshobbies/argocd-tutorial.git
+              revision: main
+              directories:
+                - path: v09-argocd-applicationSet-1/git-generator/resources/*
+          - list:
+              elements:
+              - environment: pre-staging
+                server: https://kubernetes.default.svc
+              - environment: staging
+                server: https://192.168.226.93:6443
+  template:
+    metadata:
+      name: '{{path.basename}}-{{environment}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/devopshobbies/argocd-tutorial.git
+        targetRevision: main
+        path: '{{path}}'
+      destination:
+        server: '{{server}}'
+        namespace: '{{environment}}'
+      syncPolicy:
+        automated: {}
+        syncOptions:
+          - CreateNamespace=true
