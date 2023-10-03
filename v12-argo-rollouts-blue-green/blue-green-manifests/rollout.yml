@@ -18,7 +18,7 @@ spec:
         imagePullPolicy: Never
         env:
         - name: html_name
-          value: "app-v2.html"
+          value: "app-v1.html"
         ports:
         - containerPort: 5000
   strategy:
