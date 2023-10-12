@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: rolling-update
+spec:
+  replicas: 5
+  strategy:
+    canary:
+      maxSurge: 2
+      maxUnavailable: 2
+  selector:
+    matchLabels:
+      app: rolling-update
+  template:
+    metadata:
+      labels:
+        app: rolling-update
+    spec:
+      containers:
+      - name: rolling-update
+        image: canary # This is the same image that we built in the previous session (blue-green) , I just re-tagged it
+        imagePullPolicy: Never
+        env:
+        - name: html_name
+          value: "app-v1.html"
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rolling-update
+spec:
+  ports:
+  - port: 5000
+    targetPort: 5000
+  selector:
+    app: rolling-update
