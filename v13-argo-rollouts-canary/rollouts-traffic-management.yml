@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
       - name: rollouts-traffic-management
-        image: canary # This is the same image that we built in the previous session (blue-green) , I just re-tagged it
+        image: canary # This is the same image that we built in the previous session (v12-argo-rollouts-blue-green) , I just re-tagged it
         imagePullPolicy: Never
         env:
         - name: html_name
