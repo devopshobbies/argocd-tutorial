@@ -1,0 +1,133 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: success-rate-pre ######## pre-promotion-analysis
+spec:
+  args:
+  - name: service-port
+    value: "5000"
+  - name: service-namespace
+  metrics:
+  - name: success-rate-pre
+    provider:
+      job:
+        metadata:
+          labels:
+            analysis: pre-promotion # labels defined here will be copied to the Job object
+        spec:
+          backoffLimit: 0
+          template:
+            spec:
+              containers:
+              - name: success-rate-pre
+                image: analysis ##### this is the same image that we built to get success_rate . you can find related files (Dockerfile, app-success-rate.sh) in the current directory
+                imagePullPolicy: Never
+                env:
+                - name: service_url
+                  value: "http://rollout-bluegreen-preview.{{args.service-namespace}}.svc.cluster.local:{{args.service-port}}"
+                command: ["/bin/bash", "-c"]
+                args:
+                - ./app-success-rate.sh
+              restartPolicy: Never
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: success-rate-post ######## post-promotion-analysis
+spec:
+  args:
+  - name: service-port
+    value: "5000"
+  - name: service-namespace
+  metrics:
+  - name: success-rate-post
+    provider:
+      job:
+        metadata:
+          labels:
+            analysis: post-promotion # labels defined here will be copied to the Job object
+        spec:
+          backoffLimit: 0
+          template:
+            spec:
+              containers:
+              - name: success-rate-post
+                image: analysis
+                imagePullPolicy: Never
+                env:
+                - name: service_url
+                  value: "http://rollout-bluegreen-active.{{args.service-namespace}}.svc.cluster.local:{{args.service-port}}"
+                command: ["/bin/bash", "-c"]
+                args:
+                - ./app-success-rate.sh
+              restartPolicy: Never
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: blue-green-deployment
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: blue-green-deployment
+  template:
+    metadata:
+      labels:
+        app: blue-green-deployment
+    spec:
+      containers:
+      - name: blue-green
+        image: blue-green
+        imagePullPolicy: Never
+        env:
+        - name: html_name
+          value: "app-v1.html"
+        ports:
+        - containerPort: 5000
+  strategy:
+    blueGreen: 
+      activeService: rollout-bluegreen-active
+      previewService: rollout-bluegreen-preview
+      autoPromotionEnabled: true
+      prePromotionAnalysis:
+        templates:
+        - templateName: success-rate-pre
+        args:
+        - name: service-namespace
+          value: blue-green
+      postPromotionAnalysis:
+        templates:
+        - templateName: success-rate-post
+        args:
+        - name: service-namespace
+          value: blue-green
+      # abortScaleDownDelaySeconds: 10
+      # scaleDownDelaySeconds: 60
+      # previewReplicaCount: 2
+      # autoPromotionSeconds: 70
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: rollout-bluegreen-active
+spec:
+  selector:
+    app: blue-green-deployment
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: rollout-bluegreen-preview
+spec:
+  selector:
+    app: blue-green-deployment
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
