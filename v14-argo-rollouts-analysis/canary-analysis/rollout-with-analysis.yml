@@ -4,7 +4,7 @@ metadata:
   name: success-rate
 spec:
   args:
-  - name: service_address
+  - name: service_address ### This is the variable related to the ip address of app-success-rate flask app
     value: "192.168.1.4" #### WE are using a flask script to get the url of the application and try to connect to it 5 times at 5 seconds intervals and returns one of the true or false values based on "200 response_code" in a json format, if the success_rate is 80% or more , it returns "true" value, Otherwise it returns "false" value, you can find this simple app in the current directory (its name is app-success-rate.py). 
   - name: service_port ### This is the variable related to the port of app-success-rate flask app
   metrics:
