@@ -1,0 +1,81 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: success-rate
+spec:
+  args:
+  - name: service_address
+    value: "192.168.1.4" #### WE are using a flask script to get the url of the application and try to connect to it 5 times at 5 seconds intervals and returns one of the true or false values based on "200 response_code" in a json format, if the success_rate is 80% or more , it returns "true" value, Otherwise it returns "false" value, you can find this simple app in the current directory (its name is app-success-rate.py). 
+  - name: service_port ### This is the variable related to the port of app-success-rate flask app
+  metrics:
+  - name: success-rate
+    successCondition: result == "true"
+    provider:
+      web:
+        method: POST
+        url: "http://{{args.service_address}}:{{args.service_port}}/measure_success_rate" #### The url related to the app-success-rate flask app
+        timeoutSeconds: 50 # defaults to 10 seconds
+        headers:
+          - key: Content-Type # if body is a json, it is recommended to set the Content-Type
+            value: "application/json"
+        jsonBody: # If using jsonBody Content-Type header will be automatically set to json
+          url: "http://rollouts-setweight.demo"
+        jsonPath: "{$.data.ok}"
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: rollouts-setweight
+spec:
+  replicas: 5
+  strategy:
+    canary:
+    # analysis:      #### This is a Backgound Analysis
+    #    templates:
+    #    - templateName: success-rate
+    #    args:
+    #      - name: service_port #### This is the variable related to the port of app-success-rate flask app
+    #        value: "5001"
+      steps:
+      - setWeight: 20
+      - pause: {}
+      - setWeight: 40
+      - pause: {duration: 10s}
+      - analysis: #### This is an Inline Analysis
+          templates:
+          - templateName: success-rate
+          args:
+          - name: service_port #### This is the variable related to the port of app-success-rate flask app
+            value: "5001"
+      - setWeight: 60
+      - pause: {duration: 20s}
+      - setWeight: 80
+      - pause: {duration: 1m}
+  selector:
+    matchLabels:
+      app: rollouts-setweight
+  template:
+    metadata:
+      labels:
+        app: rollouts-setweight
+    spec:
+      containers:
+      - name: rollouts-setweight
+        image: canary # This is the same image that we built in blue-green session , I just re-tagged it
+        imagePullPolicy: Never
+        env:
+        - name: html_name
+          value: "app-v1.html"
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rollouts-setweight
+spec:
+  ports:
+  - port: 5000
+    targetPort: 5000
+  selector:
+    app: rollouts-setweight
