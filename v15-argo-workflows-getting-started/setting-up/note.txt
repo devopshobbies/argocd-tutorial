@@ -1,0 +1,8 @@
+### Installing Argo-Workflows Helm Chart
+### Please Note that before installing Argo-workflows, you must have nginx-ingress-controller installed on the cluster
+### Also make sure to add the host used in the ingress to the /etc/hosts file
+
+### Install Argo-Workflows Helm Chart as following:
+kubectl create ns argo
+helm repo add argo https://argoproj.github.io/argo-helm
+helm install <<NAME>> argo/argo-cd -n argocd -f values.yml
