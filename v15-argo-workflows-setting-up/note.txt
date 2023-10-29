@@ -5,4 +5,4 @@
 ### Install Argo-Workflows Helm Chart as following:
 kubectl create ns argo
 helm repo add argo https://argoproj.github.io/argo-helm
-helm install <<NAME>> argo/argo-cd -n argocd -f values.yml
+helm install <<NAME>> argo/argo-workflows -n argo -f values.yml
