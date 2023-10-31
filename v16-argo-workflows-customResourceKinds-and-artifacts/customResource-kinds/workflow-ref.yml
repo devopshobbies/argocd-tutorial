@@ -1,0 +1,12 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: argo-wf-ref-
+spec:
+  entrypoint: container-template
+# arguments:
+#    parameters:
+#      - name: message
+#        value: "created from workflow-template"
+  workflowTemplateRef:
+    name: argo-wf-template

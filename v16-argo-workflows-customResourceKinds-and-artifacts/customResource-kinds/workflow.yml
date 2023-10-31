@@ -1,0 +1,53 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: argo-wf-
+spec:
+  entrypoint: dag-template
+  #  arguments:
+  #  parameters:
+  #    - name: message
+  #      value: "hello from workflow.spec.arguments.parameters"
+  templates:
+  - name: dag-template
+    dag:
+      tasks:
+        - name: A
+          templateRef:
+          # name: argo-cluster-wf-template
+          # template: container-template
+          # clusterScope: true   ### it's needed to use <<clusterScope: true>> if your templateRef is a ClusterWorkflowTemplate
+        # arguments:
+         #  parameters:
+          #   - name: message
+          #     value: "hello from workflow.spec.templates.dag.tasks.A"
+        - name: B
+          template: script-template
+          dependencies: [A]
+        - name: C
+          template: resource-template
+          dependencies: [A]
+        - name: D
+          template: suspend-template
+          dependencies: [B, C]
+  - name: script-template
+    script:
+      image: python:alpine3.6
+      command: [python]
+      source: |
+        import random
+        i = random.randint(1, 10)
+        print(i)
+  - name: resource-template
+    resource:
+      action: create
+      manifest: |
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          generateName: argo-wf-resource-template-cm-
+        data:
+          created_by: argo-wrkflows
+  - name: suspend-template
+    suspend:
+      duration: "20s"

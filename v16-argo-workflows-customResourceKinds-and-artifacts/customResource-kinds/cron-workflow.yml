@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: CronWorkflow
+metadata:
+  generateName: argo-cron-wf-
+spec:
+  schedule: "*/2 * * * *"
+  suspend: false
+  concurrencyPolicy: "Forbid"
+  startingDeadlineSeconds: 0
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  workflowSpec:
+    entrypoint: dag-template
+    templates:
+    - name: dag-template
+      dag:
+        tasks:
+          - name: A
+            template: script-template
+          - name: B
+            template: resource-template
+            dependencies: [A]
+          - name: C
+            template: suspend-template
+            dependencies: [A, B]
+    - name: script-template
+      script:
+        image: python:alpine3.6
+        command: [python]
+        source: |
+          import random
+          i = random.randint(1, 10)
+          print(i)
+    - name: resource-template
+      resource:
+        action: create
+        manifest: |
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            generateName: argo-wf-resource-template-cm-
+          data:
+            created_by: argo-wrkflows
+    - name: suspend-template
+      suspend:
+        duration: "20s"

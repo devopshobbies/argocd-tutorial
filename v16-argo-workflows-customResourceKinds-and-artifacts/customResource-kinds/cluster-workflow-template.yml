@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ClusterWorkflowTemplate
+metadata:
+  name: argo-cluster-wf-template
+spec:
+  templates:
+    - name: container-template
+    # inputs:
+    #   parameters:
+    #     - name: message
+      container:
+        image: alpine
+        command: ["/bin/sh", "-c"]
+        args: ["echo {{workflow.parameters.message}}"] ### you can instantiate your global variables in your "Workflow" and then directly reference them in your "WorkflowTemplate"
+      # args: ["echo {{inputs.parameters.message}}"] ### Use <<inputs>> instead of <<workflow>> if you want to get the variable from inputs.parameters 
