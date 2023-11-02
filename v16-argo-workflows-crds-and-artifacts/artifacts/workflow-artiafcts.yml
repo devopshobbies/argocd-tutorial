@@ -71,7 +71,7 @@ spec:
           generateName: argo-wf-resource-template-cm-
         data:
           created_by: argo-workflows
-  - name: script-template-new
+  - name: script-template-new #  # Defining the "script template new" as a Template Definition
     inputs:
       artifacts:
         - name: random_num_in
