@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: hardwired-artifact-
+spec:
+  entrypoint: hardwired-artifact
+  templates:
+  - name: hardwired-artifact
+    inputs:
+      artifacts:
+      # Check out the main branch of the argo repo and place it at /devopshobies
+      # revision can be anything that git checkout accepts: branch, commit, tag, etc.
+      - name: argo-source
+        path: /devopshobbies
+        git:
+          repo: https://github.com/devopshobbies/argocd-tutorial.git
+          revision: "main"
+      # Download docker-compose v2.23.0 and place it at /usr/local/bin/
+      - name: docker-compose
+        path: /usr/local/bin/docker-compose
+        mode: 0755
+        http:
+          url: https://github.com/docker/compose/releases/download/v2.23.0/docker-compose-linux-x86_64
+    container:
+      image: alpine
+      command: [sh, -c]
+      args: ["ls -l /devopshobbies /usr/local/bin/docker-compose"]

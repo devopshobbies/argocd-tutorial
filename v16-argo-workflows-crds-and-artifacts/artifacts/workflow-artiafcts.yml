@@ -1,0 +1,88 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: argo-wf-  # Name of this Workflow
+spec:
+  artifactRepositoryRef:
+    configMap: artifact-repository ## Defining a specific artifact repository for a workflow. there is no need to specify the name of the artifact repository configmap unless its name is artifact-repositories
+  arguments:
+  entrypoint: dag-template # Defines "dag-template" as the "main" template
+  templates:
+  - name: dag-template # Defining the "dag template" as a Template Invocator, You must use one of "dag" or "steps" as a template invocator
+    dag:
+      tasks:
+        - name: A
+          template: container-template
+          arguments:
+        - name: B
+          template: script-template
+          dependencies: [A]
+        - name: C
+          template: resource-template
+          dependencies: [A, B]
+        - name: D
+          template: script-template-new
+          dependencies: [A, B, C]
+          arguments:
+            artifacts:
+              - name: random_num_in
+                from: "{{tasks.B.outputs.artifacts.random_num_out}}"
+        - name: E
+          template: delay-template
+          dependencies: [A, B, C, D]
+# - name: steps-template # Defining the "steps template" as a Template Invocator, You must use one of "dag" or "steps" as a template invocator
+#   steps:
+#   - - name: step1
+#       template: container-template
+#   - - name: step2a
+#       template: script-template
+#     - name: step2b
+#       template: resource-template
+#   - - name: step3
+#       template: delay-template
+
+
+  - name: container-template # Defining the "container template" as a Template Definition
+    container:
+      image: alpine
+      command: ["/bin/sh", "-c"]
+      args: ["echo hello from container template"]
+  - name: script-template # Defining the "script template" as a Template Definition
+    script:
+      image: python:alpine3.6
+      command: [python]
+      source: |
+        import random
+        i = random.randint(1, 100)
+        with open('/tmp/rand-num.txt', 'w') as f:
+            f.write(str(i))
+        # print(i)
+    outputs:
+      artifacts:
+        - name: random_num_out
+          path: /tmp/rand-num.txt
+  - name: resource-template # Defining the "resource template" as a Template Definition
+    resource:
+      action: create
+      manifest: |
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          generateName: argo-wf-resource-template-cm-
+        data:
+          created_by: argo-workflows
+  - name: script-template-new
+    inputs:
+      artifacts:
+        - name: random_num_in
+          path: /tmp/rand.txt
+    script:
+      image: python:alpine3.6
+      command: [python]
+      source: |
+        with open('/tmp/rand.txt', 'r') as f:
+            number = f.read()
+        print(number)
+  - name: delay-template # Defining the "delay template" as a Template Definition
+    suspend:
+      duration: "20s"
