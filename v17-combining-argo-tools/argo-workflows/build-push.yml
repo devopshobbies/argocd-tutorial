@@ -23,7 +23,7 @@ spec:
         volumeMounts:
           - name: docker-config-secret
             mountPath: /.docker
-        workingDir: /tmp/source/app
+        workingDir: /tmp/source/v17-combining-argo-tools/app
         env:
           - name: BUILDKITD_FLAGS
             value: --oci-worker-no-process-sandbox
