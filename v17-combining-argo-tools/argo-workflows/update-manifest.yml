@@ -11,7 +11,7 @@ spec:
           path: /tmp/source
       script:
         image: alpine/git
-        workingDir: /tmp/source/argo-rollouts
+        workingDir: /tmp/source/v17-combining-argo-tools/argo-rollouts
         command: [sh]
         source: |
           sed -i s'/image:.*/image: {{workflow.parameters.nexus-registry}}\/nginx:{{workflow.uid}}/' nginx-rollouts.yml
