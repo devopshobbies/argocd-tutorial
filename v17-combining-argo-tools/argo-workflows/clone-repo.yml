@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: clone-repo-wf-template
+spec:
+  templates:
+    - name: clone-repo
+      outputs:
+        artifacts:
+        - name: source
+          path: /tmp/source
+      script:
+        image: alpine/git
+        command: [sh]
+        source: |
+          git clone {{workflow.parameters.repo-url}} /tmp/source

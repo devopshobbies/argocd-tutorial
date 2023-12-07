@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: argo-demo-
+spec:
+  arguments:
+    parameters:
+      - name: repo-url
+        value: https://USERNAME:TOKEN@github.com/devopshobbies/argocd-tutorial.git
+      - name: branch
+        value: main
+      - name: nexus-registry
+        value: NEXUS-IP-ADDRESS:REPO_HTTP_PORT
+  artifactRepositoryRef:
+    configMap: artifact-repository
+  entrypoint: ci
+  templates:
+  - name: ci
+    dag:
+      tasks:
+      - name: clone-repo-task
+        templateRef:
+          name: clone-repo-wf-template
+          template: clone-repo
+      - name: build-push-task
+        templateRef:
+          name: build-push-wf-template
+          template: build-and-push
+        arguments:
+          artifacts:
+            - name: source
+              from: "{{tasks.clone-repo-task.outputs.artifacts.source}}"
+        dependencies: [clone-repo-task]
+      - name: update-manifest-task
+        templateRef:
+          name: update-manifest-wf-template
+          template: update-manifest
+        arguments:
+          artifacts:
+            - name: source
+              from: "{{tasks.clone-repo-task.outputs.artifacts.source}}"
+        dependencies: [clone-repo-task, build-push-task]

@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: update-manifest-wf-template
+spec:
+  templates:
+    - name: update-manifest
+      inputs:
+        artifacts:
+        - name: source
+          path: /tmp/source
+      script:
+        image: alpine/git
+        workingDir: /tmp/source/argo-rollouts
+        command: [sh]
+        source: |
+          sed -i s'/image:.*/image: {{workflow.parameters.nexus-registry}}\/nginx:{{workflow.uid}}/' nginx-rollouts.yml
+          git config user.name "USERNAME"
+          git config user.email "EMAIL"
+          git add .
+          git commit -m "image.tag has been changed to {{workflow.uid}}"
+          git push origin {{workflow.parameters.branch}}
