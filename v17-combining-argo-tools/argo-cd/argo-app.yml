@@ -9,7 +9,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: argo-rollouts
+    path: v17-combining-argo-tools/argo-rollouts
     repoURL: https://github.com/devopshobbies/argocd-tutorial.git
     targetRevision: main
   syncPolicy:
