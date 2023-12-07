@@ -10,7 +10,7 @@ spec:
       - name: branch
         value: main
       - name: nexus-registry
-        value: PRIVATE_REGISTRY_ADDRESS:PORT
+        value: 192.168.233.214:8085
   artifactRepositoryRef:
     configMap: artifact-repository
   entrypoint: ci
