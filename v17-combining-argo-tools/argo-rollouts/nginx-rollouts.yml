@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
       - name: nginx-rollouts
-        image: PRIVATE_REGISTRY_ADDRESS:PORT/nginx:0bc1a466-5323-4ef8-8e4c-60ab88c35c68 ## argo-workflows is responsible to generate image.tag based on workflow uid (each workflow has a unique uid)
+        image: 192.168.233.214:8085/nginx:alpine
         ports:
         - containerPort: 80
 ---
