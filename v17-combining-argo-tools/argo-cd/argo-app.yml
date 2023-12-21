@@ -13,6 +13,8 @@ spec:
     repoURL: https://github.com/devopshobbies/argocd-tutorial.git
     targetRevision: main
   syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
     automated:
       prune: true
       selfHeal: true
