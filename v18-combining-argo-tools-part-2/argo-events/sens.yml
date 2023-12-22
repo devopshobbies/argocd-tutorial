@@ -1,0 +1,126 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: ci
+  namespace: argo-events
+spec:
+  template:
+    serviceAccountName: operate-workflow-sa
+  dependencies:
+    - name: ci
+      eventSourceName: ci
+      eventName: argo-demo
+  triggers:
+    - template:
+        name: ci
+        argoWorkflow:
+          operation: submit
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: Workflow
+              metadata:
+                generateName: argo-demo-
+              spec:
+                arguments:
+                  parameters:
+                    - name: app-repo-url
+                      value: http://USERNAME:TOKEN@gitlab.isc/root/my-app.git
+                    - name: argo-config-repo-url
+                      value: http://USERNAME:TOKEN@gitlab.isc/root/argo-config.git
+                    - name: app-clone-dest
+                      value: /tmp/app
+                    - name: argo-config-clone-dest
+                      value: /tmp/argo-config
+                    - name: argo-config-branch
+                      value: main
+                    - name: nexus-registry
+                      value: 192.168.1.2:8085
+                artifactRepositoryRef:
+                  configMap: artifact-repository
+                entrypoint: ci
+                templates:
+                - name: ci
+                  dag:
+                    tasks:
+                    - name: clone-repo-task
+                      template: clone-repo
+                    - name: build-push-task
+                      template: build-and-push
+                      arguments:
+                        artifacts:
+                          - name: app-repo
+                            from: "{{tasks.clone-repo-task.outputs.artifacts.app-repo}}"
+                      dependencies: [clone-repo-task]
+                    - name: update-manifest-task
+                      template: update-manifest
+                      arguments:
+                        artifacts:
+                          - name: argo-config-repo
+                            from: "{{tasks.clone-repo-task.outputs.artifacts.argo-config-repo}}"
+                      dependencies: [clone-repo-task, build-push-task]
+                - name: clone-repo
+                  outputs:
+                    artifacts:
+                    - name: app-repo
+                      path: "{{workflow.parameters.app-clone-dest}}"
+                    - name: argo-config-repo
+                      path: "{{workflow.parameters.argo-config-clone-dest}}"
+                  script:
+                    image: alpine/git
+                    command: [sh]
+                    source: |
+                      git clone {{workflow.parameters.app-repo-url}} {{workflow.parameters.app-clone-dest}} && git clone {{workflow.parameters.argo-config-repo-url}} {{workflow.parameters.argo-config-clone-dest}}
+                - name: build-and-push
+                  inputs:
+                    artifacts:
+                    - name: app-repo
+                      path: "{{workflow.parameters.app-clone-dest}}"
+                  volumes:
+                    - name: docker-config-secret
+                      secret:
+                        secretName: docker-config-secret
+                  container:
+                    readinessProbe:
+                      exec:
+                        command: [ sh, -c, "buildctl debug workers" ]
+                    image: moby/buildkit:v0.9.3-rootless
+                    volumeMounts:
+                      - name: docker-config-secret
+                        mountPath: /.docker
+                    workingDir: "{{workflow.parameters.app-clone-dest}}"
+                    env:
+                      - name: BUILDKITD_FLAGS
+                        value: --oci-worker-no-process-sandbox
+                      - name: DOCKER_CONFIG
+                        value: /.docker
+                    command:
+                      - buildctl-daemonless.sh
+                    args:
+                      - build
+                      - --frontend
+                      - dockerfile.v0
+                      - --local
+                      - context=.
+                      - --local
+                      - dockerfile=.
+                      - --output
+                      - type=image,name={{workflow.parameters.nexus-registry}}/nginx:{{workflow.uid}},push=true,registry.insecure=true
+                    securityContext:
+                      privileged: true
+                - name: update-manifest
+                  inputs:
+                    artifacts:
+                      - name: argo-config-repo
+                        path: "{{workflow.parameters.argo-config-clone-dest}}"
+                  script:
+                    image: alpine/git
+                    workingDir: "{{workflow.parameters.argo-config-clone-dest}}/argo-rollouts"
+                    command: [sh]
+                    source: |
+                      sed -i s'/image:.*/image: {{workflow.parameters.nexus-registry}}\/nginx:{{workflow.uid}}/' nginx-rollouts.yml
+                      git config user.name "USERNAME"
+                      git config user.email "EMAIL"
+                      git add .
+                      git commit -m "image.tag has been changed to {{workflow.uid}}"
+                      git push origin {{workflow.parameters.argo-config-branch}}

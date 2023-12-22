@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: nginx-rollouts
+spec:
+  replicas: 5
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause: {}
+      - setWeight: 40
+      - pause: {duration: 10s}
+      - setWeight: 60
+      - pause: {duration: 20s}
+      - setWeight: 80
+      - pause: {duration: 1m}
+  selector:
+    matchLabels:
+      app: nginx-rollouts
+  template:
+    metadata:
+      labels:
+        app: nginx-rollouts
+    spec:
+      containers:
+      - name: nginx-rollouts
+        image: 192.168.1.2:8085/nginx:alpine
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  ports:
+  - port: 8080
+    targetPort: 80
+  selector:
+    app: nginx-rollouts

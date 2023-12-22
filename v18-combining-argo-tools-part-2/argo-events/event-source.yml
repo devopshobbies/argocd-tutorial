@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gitlab-access
+  namespace: argo-events
+type: Opaque
+data:
+  token: TOKEN
+---
+apiVersion: argoproj.io/v1alpha1
+kind: EventSource
+metadata:
+  name: ci
+  namespace: argo-events
+spec:
+  service:
+    ports:
+      - port: 12000
+        targetPort: 12000
+  gitlab:
+    argo-demo:
+      projects:
+        - "35"
+      webhook:
+        endpoint: /push
+        port: "12000"
+        url: http://argo.events
+      events:
+        - PushEvents
+      accessToken:
+        key: token
+        name: gitlab-access
+      enableSSLVerification: false
+      gitlabBaseURL: http://gitlab.isc
+      deleteHookOnFinish: true
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argo-demo-ingress
+  namespace: argo-events
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: argo.events
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ci-eventsource-svc
+            port:
+              number: 12000
