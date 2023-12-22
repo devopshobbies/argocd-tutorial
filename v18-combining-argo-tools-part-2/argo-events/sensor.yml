@@ -1,3 +1,6 @@
+# Create a service account with RBAC settings to allow the sensor to trigger workflows, and allow workflows to function.
+# kubectl apply -n argo-events -f https://raw.githubusercontent.com/argoproj/argo-events/master/examples/rbac/sensor-rbac.yaml
+# kubectl apply -n argo-events -f https://raw.githubusercontent.com/argoproj/argo-events/master/examples/rbac/workflow-rbac.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Sensor
 metadata:
