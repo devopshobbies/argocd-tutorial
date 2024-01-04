@@ -13,6 +13,8 @@ spec:
     repoURL: http://gitlab.isc/root/argo-config.git
     targetRevision: main
   syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
     automated:
       prune: true
       selfHeal: true
