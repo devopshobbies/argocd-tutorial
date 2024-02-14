@@ -16,3 +16,7 @@
      - [Argo-cd Projects](https://www.youtube.com/watch?v=VT4NTt5rUew&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4&index=4)
      - [Argo-cd Private Repos](https://www.youtube.com/watch?v=SsewuwHuA08&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4&index=5)
      - [Argo-cd Sync Policies And Sync Options](https://www.youtube.com/watch?v=XU08NQH11-Q&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4&index=6)
+     - [Argo-cd Sync Phases And Sync Waves](https://www.youtube.com/watch?v=nXx-Y3Vbn_0&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4&index=7)
+     - [Argo-cd Adding Cluster & Tracking Strategies](https://www.youtube.com/watch?v=dBpauFPL64A&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4&index=8)
+     - [Argo-cd ApplicationSet Part-1](https://www.youtube.com/watch?v=LoFazAmwWOw&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4&index=9)
+     - [Argo-cd ApplicationSet Part-2](https://www.youtube.com/watch?v=yT3w2iig9MI&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4&index=10)
