@@ -23,5 +23,5 @@
   - Argo-Rollouts
      - [Argo-Rollouts Overview & Installation](https://www.youtube.com/watch?v=hgEVcHhBwPw&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4&index=11)
      - [Argo-Rollouts Blue-Green Deployment Strategy](https://www.youtube.com/watch?v=q1pMzZE8Ugw&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4&index=12)
-     - []()
-     - []()
+     - [Argo-Rollouts Canary Deployment Strategy](https://www.youtube.com/watch?v=MY4E8TgQ5Gs&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4&index=13)
+     - [Argo-Rollouts Analysis](https://www.youtube.com/watch?v=qbHv3riNN0g&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4&index=15)
