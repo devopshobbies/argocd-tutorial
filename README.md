@@ -27,3 +27,4 @@
      - [Argo-Rollouts Analysis](https://www.youtube.com/watch?v=qbHv3riNN0g&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4&index=15)
   - Argo-Workflows
      - [Argo-Workflows Getting-Started](https://www.youtube.com/watch?v=UgpVX5Sn5OI&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4&index=14)
+     - [Argo-Workflows Custom Resource Kinds & Artifacts](https://www.youtube.com/watch?v=ugB7v5WadGY&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4&index=16)
