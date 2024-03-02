@@ -28,3 +28,4 @@
   - Argo-Workflows
      - [Argo-Workflows Getting-Started](https://www.youtube.com/watch?v=UgpVX5Sn5OI&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4&index=14)
      - [Argo-Workflows Custom Resource Kinds & Artifacts](https://www.youtube.com/watch?v=ugB7v5WadGY&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4&index=16)
+     - [CICD with Argo tools ( Part 1 )](https://www.youtube.com/watch?v=WxLqz9TyRSc&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4&index=17)
