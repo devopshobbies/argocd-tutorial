@@ -28,5 +28,6 @@
   - Argo-Workflows
      - [Argo-Workflows Getting-Started](https://www.youtube.com/watch?v=UgpVX5Sn5OI&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4&index=14)
      - [Argo-Workflows Custom Resource Kinds & Artifacts](https://www.youtube.com/watch?v=ugB7v5WadGY&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4&index=16)
-  - Final Project (Argo-CD + Argo-Rollouts + Argo-Workflows + Argo-Eevents)
+  - Final Project (Argo-CD + Argo-Rollouts + Argo-Workflows + Argo-Events)
      - [CICD with Argo tools ( Part 1 )](https://www.youtube.com/watch?v=WxLqz9TyRSc&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4&index=17)
+     - [CICD with Argo tools ( Part 2 )](https://www.youtube.com/watch?v=ex-F_VXNYNA&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4&index=18)
