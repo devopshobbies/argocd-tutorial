@@ -9,7 +9,7 @@
 
 
 ## About the Author
-  - Mohammad Madanipour
+  - **Mohammad Madanipour**
     - [GitHub](https://github.com/mohammadll)
     - [Linkedin](https://linkedin.com/in/mohammad-madanipour)
 
