@@ -8,6 +8,12 @@
 * [Argo Events](https://github.com/argoproj/argo-events) - Event-based Dependency Manager
 
 
+## About the Author
+  - Mohammad Madanipour
+    - [GitHub](https://github.com/mohammadll)
+    - [Linkedin](https://linkedin.com/in/mohammad-madanipour)
+
+
 ## You can also follow the videos of the Argo-Stack course on YouTube:
   - Argo-CD:
      - [Argo-CD Core Concepts](https://www.youtube.com/watch?v=T-ERIOb_3z0&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4)
