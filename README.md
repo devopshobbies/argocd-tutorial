@@ -14,7 +14,7 @@
     - [Linkedin](https://linkedin.com/in/mohammad-madanipour)
 
 
-## You can also follow the videos of the Argo-Stack course on YouTube:
+## You can also follow the videos of the Argo-Stack course on YouTube
   - **Argo-CD**
      - [Argo-CD Core Concepts](https://www.youtube.com/watch?v=T-ERIOb_3z0&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4)
      - [Argo-CD Setting-up](https://www.youtube.com/watch?v=pVnk9utUit8&list=PLYrn63eEqAzYttcyB6On1oH35O5rxgDt4&index=2)
