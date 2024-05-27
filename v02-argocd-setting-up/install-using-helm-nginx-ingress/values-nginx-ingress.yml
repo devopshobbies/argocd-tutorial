@@ -5,9 +5,4 @@ server:
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       nginx.ingress.kubernetes.io/ssl-passthrough: "true"
     ingressClassName: nginx
-    hosts:
-    - devops.hobbies
-    paths:
-      - /
-    pathType: Prefix
-    https: true
+    hostname: "devops.hobbies"
