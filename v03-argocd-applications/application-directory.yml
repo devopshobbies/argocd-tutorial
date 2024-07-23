@@ -8,8 +8,8 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-          #    directory:
-          #     exclude: 'service.yml'
+              directory:
+               exclude: 'service.yml'
           #      include: '{serviceaccount.yml,service.yml}'
           #      recurse: true
     path: v03-argocd-applications/directoryOfmanifests
