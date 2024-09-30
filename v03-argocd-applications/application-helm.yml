@@ -8,13 +8,19 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-          #    helm:
+  # It's possible to override helm values through different ways such as "valueFiles", "values", "valuesObject" and "parameters". 
+  # Values injections have the following order of precedence parameters > valuesObject > values > valueFiles > helm repository values.yaml Or rather
+          #   helm:
           #      releaseName: application-from-helm
-          #      parameters:
-          #        - name: "replicaCount"
-          #          value: "3"
           #      valueFiles:
           #        - custom-values.yaml
+          #      values: |
+          #        replicaCount: 3
+          #      valuesObject:
+          #        replicaCount: 5
+          #      parameters:
+          #        - name: "replicaCount"
+          #          value: "1"
     path: v03-argocd-applications/helm/nginx
     repoURL: https://github.com/devopshobbies/argocd-tutorial.git
     targetRevision: main
