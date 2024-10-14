@@ -10,12 +10,12 @@ spec:
       containers:
         - name: mattermost-failure
           image: mattermost:final
-          command: [ "python3", "mattermost.py"]
+          command: [ "python3", "mattermost_api.py"]
           env:
           - name: message
             value: "MESSAGE FROM ARGOCD: The last sync is:  *** Sync Failed ***"
           - name: url
-            value: "192.168.208.253"
+            value: "mattermost.local"
           - name: token
             value: "1mh8r35js7dhpcswb4mpnkwpcw"
           - name: scheme
