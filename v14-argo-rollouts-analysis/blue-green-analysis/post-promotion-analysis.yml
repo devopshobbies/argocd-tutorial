@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: success-rate-post ######## post-promotion-analysis
+spec:
+  args:
+  - name: service-port
+    value: "5000"
+  - name: service-namespace
+  metrics:
+  - name: success-rate-post
+    provider:
+      job:
+        metadata:
+          labels:
+            analysis: post-promotion # labels defined here will be copied to the Job object
+        spec:
+          backoffLimit: 0
+          template:
+            spec:
+              containers:
+              - name: success-rate-post
+                image: analysis
+                imagePullPolicy: Never
+                env:
+                - name: service_url
+                  value: "http://rollout-bluegreen-active.{{args.service-namespace}}.svc.cluster.local:{{args.service-port}}"
+                command: ["/bin/bash", "-c"]
+                args:
+                - ./app-success-rate.sh
+              restartPolicy: Never

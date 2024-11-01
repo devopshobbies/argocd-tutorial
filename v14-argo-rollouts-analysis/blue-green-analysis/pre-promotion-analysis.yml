@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: success-rate-pre ######## pre-promotion-analysis
+spec:
+  args:
+  - name: service-port
+    value: "5000"
+  - name: service-namespace
+  metrics:
+  - name: success-rate-pre
+    provider:
+      job:
+        metadata:
+          labels:
+            analysis: pre-promotion # labels defined here will be copied to the Job object
+        spec:
+          backoffLimit: 0
+          template:
+            spec:
+              containers:
+              - name: success-rate-pre
+                image: analysis ##### this is the same image that we built to get success_rate . you can find related files (Dockerfile, app-success-rate.sh) in the current directory
+                imagePullPolicy: Never
+                env:
+                - name: service_url
+                  value: "http://rollout-bluegreen-preview.{{args.service-namespace}}.svc.cluster.local:{{args.service-port}}"
+                command: ["/bin/bash", "-c"]
+                args:
+                - ./app-success-rate.sh
+              restartPolicy: Never

@@ -1,28 +1,4 @@
 apiVersion: argoproj.io/v1alpha1
-kind: AnalysisTemplate
-metadata:
-  name: success-rate
-spec:
-  args:
-  - name: service_address ### This is the variable related to the ip address where the analysis-app.py is located
-    value: "192.168.1.4" #### WE are using a flask script to get the url of the application and try to connect to it 5 times at 5 seconds intervals and returns one of the true or false values based on "200 response_code" in a json format, if the success_rate is 80% or more , it returns "true" value, Otherwise it returns "false" value, you can find this simple app in the current directory (its name is analysis-app.py). 
-  - name: service_port ### This is the variable related to the port of analysis-app.py flask app
-  metrics:
-  - name: success-rate
-    successCondition: result == "true"
-    provider:
-      web:
-        method: POST
-        url: "http://{{args.service_address}}:{{args.service_port}}/measure_success_rate" #### The url related to the analysis-app.py flask app
-        timeoutSeconds: 50 # defaults to 10 seconds
-        headers:
-          - key: Content-Type # if body is a json, it is recommended to set the Content-Type
-            value: "application/json"
-        jsonBody: # If using jsonBody Content-Type header will be automatically set to json
-          url: "http://rollouts-setweight.demo"
-        jsonPath: "{$.data.ok}"
----
-apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
   name: rollouts-setweight
