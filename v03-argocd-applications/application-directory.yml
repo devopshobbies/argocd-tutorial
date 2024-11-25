@@ -9,9 +9,9 @@ spec:
   project: default
   source:
           #    directory:
-          #      exclude: 'service.yml'
+          #     exclude: 'service.yml'
           #      include: '{serviceaccount.yml,service.yml}'
           #      recurse: true
     path: v03-argocd-applications/directoryOfmanifests
-    repoURL: https://github.com/devopshobbies/argocd-tutorial.git
+    repoURL: https://github.com/fallahizahra123/argocd-tutorial.git
     targetRevision: main
